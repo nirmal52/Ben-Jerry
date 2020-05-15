@@ -72,6 +72,8 @@ func main() {
 
 	router.HandleFunc("/protectedEndpoint", utils.TokenVerifyMiddleWare(controller.Protected(db))).Methods("GET")
 
+	router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.GetProducts(db))).Methods("GET")
+
 	log.Fatal(http.ListenAndServe(":8000", router))
 	//uploadJSONdataToDB()
 }
