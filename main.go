@@ -73,8 +73,29 @@ func main() {
 	router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.GetProducts(db))).Methods("GET")
 	router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.GetProduct(db))).Methods("GET")
 	router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.AddProduct(db))).Methods("POST")
+	router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.UpdateProduct(db))).Methods("PUT")
 	router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.RemoveProduct(db))).Methods("DELETE")
 
+	router.HandleFunc("/products/{id}/name", utils.TokenVerifyMiddleWare(controller.GetProductName(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/name", utils.TokenVerifyMiddleWare(controller.UpdateProductName(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/image_open", utils.TokenVerifyMiddleWare(controller.GetProductImageOpen(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/image_open", utils.TokenVerifyMiddleWare(controller.UpdateProductImageOpen(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/image_closed", utils.TokenVerifyMiddleWare(controller.GetProductImageClose(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/image_closed", utils.TokenVerifyMiddleWare(controller.UpdateProductImageClose(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/description", utils.TokenVerifyMiddleWare(controller.GetProductDescription(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/description", utils.TokenVerifyMiddleWare(controller.UpdateProdutDdescription(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/story", utils.TokenVerifyMiddleWare(controller.GetProductStory(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/story", utils.TokenVerifyMiddleWare(controller.UpdateProductStory(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/allergy", utils.TokenVerifyMiddleWare(controller.GetProductAllergy(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/allergy", utils.TokenVerifyMiddleWare(controller.UpdateProductAllergy(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/diet", utils.TokenVerifyMiddleWare(controller.GetProductDiet(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/diet", utils.TokenVerifyMiddleWare(controller.UpdateProductDiet(db))).Methods("PUT")
+
 	log.Fatal(http.ListenAndServe(":8000", router))
-	//uploadJSONdataToDB()
 }

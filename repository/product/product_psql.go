@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 )
 
 type ProductRepository struct{}
@@ -14,21 +15,6 @@ func logFatal(err error) {
 		log.Fatal(err)
 	}
 }
-
-/*
-create table product (
-  id serial primary key,
-  name text,
-  image_open text,
-  image_closed text,
-  description text,
-  story text,
-  allergy_info text,
-  dietary_certifications text
-);
-
-
-*/
 
 func getIngredients(db *sql.DB, productID string) []string {
 	var ingredients []string
@@ -121,11 +107,16 @@ func (p ProductRepository) AddProduct(db *sql.DB, product models.Product) int {
 	return id
 }
 
-func (p ProductRepository) RemoveProduct(db *sql.DB, id int) int64 {
+func deleteIngredients(db *sql.DB, id int) {
 	_, _ = db.Exec("delete from ingredients where product_id = $1", id)
-
+}
+func deleteSourcingValues(db *sql.DB, id int) {
 	_, _ = db.Exec("delete from sourcing_values where product_id = $1", id)
+}
 
+func (p ProductRepository) RemoveProduct(db *sql.DB, id int) int64 {
+	deleteIngredients(db, id)
+	deleteSourcingValues(db, id)
 	result, err := db.Exec("delete from product where id = $1", id)
 	logFatal(err)
 
@@ -135,30 +126,17 @@ func (p ProductRepository) RemoveProduct(db *sql.DB, id int) int64 {
 	return rowsDeleted
 }
 
-/*
-Comment
-*/
-/*func (b BookRepository) GetBook(db *sql.DB, book models.Book, id int) models.Book {
-	rows := db.QueryRow("select * from books where id=$1", id)
+func (p ProductRepository) UpdateProduct(db *sql.DB, product models.Product) int64 {
+	id, _ := strconv.Atoi(product.ProductId)
 
-	err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
-	logFatal(err)
+	deleteIngredients(db, id)
+	deleteSourcingValues(db, id)
 
-	return book
-}
+	result, err := db.Exec("update product set name=$1,image_open =$2, image_closed=$3, description = $4, story = $5, allergy_info = $6, dietary_certifications = $7  where id=$8 RETURNING id",
+		&product.Name, &product.ImageOpen, &product.ImageClosed, &product.Description, &product.Story, &product.AllergyInfo, &product.DietaryCertifications, &product.ProductId)
 
-func (b BookRepository) AddBook(db *sql.DB, book models.Book) int {
-	err := db.QueryRow("insert into books (title, author, year) values($1, $2, $3) RETURNING id;",
-		book.Title, book.Author, book.Year).Scan(&book.ID)
-
-	logFatal(err)
-
-	return book.ID
-}
-
-func (b BookRepository) UpdateBook(db *sql.DB, book models.Book) int64 {
-	result, err := db.Exec("update books set title=$1, author=$2, year=$3 where id=$4 RETURNING id",
-		&book.Title, &book.Author, &book.Year, &book.ID)
+	addIngredients(db, id, product.Ingredients)
+	addSourcingValues(db, id, product.SourcingValues)
 
 	logFatal(err)
 
@@ -168,34 +146,149 @@ func (b BookRepository) UpdateBook(db *sql.DB, book models.Book) int64 {
 	return rowsUpdated
 }
 
-func (b BookRepository) RemoveBook(db *sql.DB, id int) int64 {
-	result, err := db.Exec("delete from books where id = $1", id)
+func (p ProductRepository) GetProductName(db *sql.DB, id int) string {
+	var name string
+
+	rows := db.QueryRow("select name from product where id=$1", id)
+
+	err := rows.Scan(&name)
 	logFatal(err)
 
-	rowsDeleted, err := result.RowsAffected()
+	return name
+}
+
+func (p ProductRepository) UpdateProductName(db *sql.DB, id int, newName string) int64 {
+
+	result, _ := db.Exec("update product set name=$1  where id=$2 RETURNING id",
+		newName, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
+}
+
+func (p ProductRepository) GetProductImageOpen(db *sql.DB, id int) string {
+	var value string
+
+	rows := db.QueryRow("select image_open from product where id=$1", id)
+
+	err := rows.Scan(&value)
 	logFatal(err)
 
-	return rowsDeleted
-}
-*/
-
-//rows1, err1 := db.Query("select value from ingredients where product_id=$1", product.ProductId)
-//logFatal(err1)
-//product.Ingredients = getIngredients(db, product.ProductId)
-//product.SourcingValues = getSourcingValues(db, product.ProductId)
-/*var ingredient string
-for rows1.Next() {
-	err2 := rows1.Scan(&ingredient)
-	logFatal(err2)
-	product.Ingredients = append(product.Ingredients, ingredient)
+	return value
 }
 
-rows2, err3 := db.Query("select value from sourcing_values where product_id=$1", product.ProductId)
-logFatal(err3)
-var sourcing_value string
-for rows2.Next() {
-	err4 := rows2.Scan(&sourcing_value)
-	logFatal(err4)
-	product.SourcingValues = append(product.SourcingValues, sourcing_value)
+func (p ProductRepository) UpdateProductImageOpen(db *sql.DB, id int, newValue string) int64 {
+
+	result, _ := db.Exec("update product set image_open=$1  where id=$2 RETURNING id",
+		newValue, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
 }
-*/
+
+func (p ProductRepository) GetProductImageClose(db *sql.DB, id int) string {
+	var value string
+
+	rows := db.QueryRow("select image_closed from product where id=$1", id)
+
+	err := rows.Scan(&value)
+	logFatal(err)
+
+	return value
+}
+
+func (p ProductRepository) UpdateProductImageClose(db *sql.DB, id int, newValue string) int64 {
+
+	result, _ := db.Exec("update product set image_closed=$1  where id=$2 RETURNING id",
+		newValue, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
+}
+
+func (p ProductRepository) GetProductDescription(db *sql.DB, id int) string {
+	var value string
+
+	rows := db.QueryRow("select description from product where id=$1", id)
+
+	err := rows.Scan(&value)
+	logFatal(err)
+
+	return value
+}
+
+func (p ProductRepository) UpdateProdutDdescription(db *sql.DB, id int, newValue string) int64 {
+
+	result, _ := db.Exec("update product set description=$1  where id=$2 RETURNING id",
+		newValue, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
+}
+
+func (p ProductRepository) GetProductStory(db *sql.DB, id int) string {
+	var value string
+
+	rows := db.QueryRow("select story from product where id=$1", id)
+
+	err := rows.Scan(&value)
+	logFatal(err)
+
+	return value
+}
+
+func (p ProductRepository) UpdateProductStory(db *sql.DB, id int, newValue string) int64 {
+
+	result, _ := db.Exec("update product set story=$1  where id=$2 RETURNING id",
+		newValue, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
+}
+
+func (p ProductRepository) GetProductAllergy(db *sql.DB, id int) string {
+	var value string
+
+	rows := db.QueryRow("select allergy_info from product where id=$1", id)
+
+	err := rows.Scan(&value)
+	logFatal(err)
+
+	return value
+}
+
+func (p ProductRepository) UpdateProductAllergy(db *sql.DB, id int, newValue string) int64 {
+
+	result, _ := db.Exec("update product set allergy_info=$1  where id=$2 RETURNING id",
+		newValue, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
+}
+
+func (p ProductRepository) GetProductDiet(db *sql.DB, id int) string {
+	var value string
+
+	rows := db.QueryRow("select dietary_certifications from product where id=$1", id)
+
+	err := rows.Scan(&value)
+	logFatal(err)
+
+	return value
+}
+
+func (p ProductRepository) UpdateProductDiet(db *sql.DB, id int, newValue string) int64 {
+
+	result, _ := db.Exec("update product set dietary_certifications =$1  where id=$2 RETURNING id",
+		newValue, id)
+
+	rowsUpdated, _ := result.RowsAffected()
+
+	return rowsUpdated
+}
