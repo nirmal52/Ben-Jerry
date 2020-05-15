@@ -1,0 +1,40 @@
+{ "email" : "nirmal@benjerry.com" ,
+  "password" : "nirmal12" }
+  
+  
+  
+ {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbEBiZW5qZXJyeS5jb20iLCJpc3MiOiJjb3Vyc2UifQ.QW5dS6e8CPNMOE4t5MkqbjSUkXFOLi6-oFN0zTa9-MQ"}
+
+create table users (
+  id serial primary key,
+  email text not null unique,
+  password text not null
+);
+
+create table product (
+  id serial primary key,
+  name text,
+  image_open text,
+  image_closed text, 
+  description text,
+  story text,
+  allergy_info text,
+  dietary_certifications text
+);
+ 
+ CREATE TABLE sourcing_values (
+	s_id serial NOT NULL,
+	product_id INTEGER,
+  value text NOT NULL,
+	PRIMARY KEY (s_id, product_id),
+	FOREIGN KEY (product_id) REFERENCES product (id)
+);
+
+
+CREATE TABLE ingredients (
+	i_id serial NOT NULL,
+	product_id INTEGER,
+  value text NOT NULL,
+	PRIMARY KEY (i_id, product_id),
+	FOREIGN KEY (product_id) REFERENCES product (id)
+);

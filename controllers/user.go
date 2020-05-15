@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"/models"
-	userRepository "book-author/repository/user"
-	"book-author/utils"
+	"ben-jerry/models"
+	userRepository "ben-jerry/repository/user"
+	"ben-jerry/utils"
 	"database/sql"
 	"encoding/json"
 	"log"
@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var users []models.User
+//var users []models.User
 
 func (c Controller) Login(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
