@@ -324,3 +324,67 @@ func (c Controller) UpdateProductDiet(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(rowsUpdated)
 	}
 }
+
+func (c Controller) GetProductIngredients(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+
+		id := params["id"]
+
+		productRepo := productRepository.ProductRepository{}
+		ingredients := productRepo.GetProductIngredients(db, id)
+
+		json.NewEncoder(w).Encode(ingredients)
+	}
+}
+
+func (c Controller) UpdateProductIngredients(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+		id := params["id"]
+
+		var product models.Product
+		_ = json.NewDecoder(r.Body).Decode(&product)
+
+		newValue := product.Ingredients
+
+		productRepo := productRepository.ProductRepository{}
+		rowsUpdated := productRepo.UpdateProductIngredients(db, id, newValue)
+
+		json.NewEncoder(w).Encode(rowsUpdated)
+	}
+}
+
+func (c Controller) GetProductSourcingValues(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+
+		id := params["id"]
+
+		productRepo := productRepository.ProductRepository{}
+		ingredients := productRepo.GetProductSourcingValues(db, id)
+
+		json.NewEncoder(w).Encode(ingredients)
+	}
+}
+
+func (c Controller) UpdateProductSourcingValues(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+		id := params["id"]
+
+		var product models.Product
+		_ = json.NewDecoder(r.Body).Decode(&product)
+
+		newValue := product.SourcingValues
+
+		productRepo := productRepository.ProductRepository{}
+		rowsUpdated := productRepo.UpdateProductSourcingValues(db, id, newValue)
+
+		json.NewEncoder(w).Encode(rowsUpdated)
+	}
+}

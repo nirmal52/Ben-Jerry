@@ -295,7 +295,15 @@ func updateSourceValues(db *sql.DB, id string, newValues []string) {
 			toBeAdded = append(toBeAdded, newValues[i])
 		}
 	}
+	if len(oldValues) == 0 {
+		toBeAdded = newValues
+	}
+	if len(newValues) == 0 {
+		toBeDeleted = oldValues
+	}
+	fmt.Print("To be deleted   ")
 	fmt.Println(toBeDeleted)
+	fmt.Print("To be added    ")
 	fmt.Println(toBeAdded)
 	deleteSourceValuesForUpdate(db, id, toBeDeleted)
 	insertSourceValue(db, id, toBeAdded)
@@ -468,4 +476,24 @@ func (p ProductRepository) UpdateProductDiet(db *sql.DB, id int, newValue string
 	rowsUpdated, _ := result.RowsAffected()
 
 	return rowsUpdated
+}
+
+func (p ProductRepository) GetProductIngredients(db *sql.DB, id string) []string {
+	ingredients := getIngredients(db, id)
+	return ingredients
+}
+
+func (p ProductRepository) UpdateProductIngredients(db *sql.DB, id string, newValues []string) string {
+	updateIngredients(db, id, newValues)
+	return "SUCCESS"
+}
+
+func (p ProductRepository) GetProductSourcingValues(db *sql.DB, id string) []string {
+	sourcingValues := getSourcingValues(db, id)
+	return sourcingValues
+}
+
+func (p ProductRepository) UpdateProductSourcingValues(db *sql.DB, id string, newValues []string) string {
+	updateSourceValues(db, id, newValues)
+	return "SUCCESS"
 }

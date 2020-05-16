@@ -214,5 +214,11 @@ func main() {
 	router.HandleFunc("/products/{id}/diet", utils.TokenVerifyMiddleWare(controller.GetProductDiet(db))).Methods("GET")
 	router.HandleFunc("/products/{id}/diet", utils.TokenVerifyMiddleWare(controller.UpdateProductDiet(db))).Methods("PUT")
 
+	router.HandleFunc("/products/{id}/ingredients", utils.TokenVerifyMiddleWare(controller.GetProductIngredients(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/ingredients", utils.TokenVerifyMiddleWare(controller.UpdateProductIngredients(db))).Methods("PUT")
+
+	router.HandleFunc("/products/{id}/sourcingvalue", utils.TokenVerifyMiddleWare(controller.GetProductSourcingValues(db))).Methods("GET")
+	router.HandleFunc("/products/{id}/sourcingvalue", utils.TokenVerifyMiddleWare(controller.UpdateProductSourcingValues(db))).Methods("PUT")
+
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
