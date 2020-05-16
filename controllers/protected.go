@@ -11,3 +11,9 @@ func (c Controller) Protected(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode("SUCCESS")
 	}
 }
+
+func (c Controller) SimpleReturn() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode("SUCCESS")
+	}
+}

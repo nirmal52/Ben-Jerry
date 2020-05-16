@@ -53,10 +53,9 @@ CREATE TABLE ingredients (
 
 
 drop table users;
-drop table products;
 drop table ingredients;
 drop table sourcing_values;
 drop table sourcingvalueindex;
 drop table ingredientsindex;
-
+drop table products;
 
