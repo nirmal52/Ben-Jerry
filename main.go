@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/subosito/gotenv"
@@ -28,11 +29,125 @@ func logError(err error) {
 	}
 }
 
+func getIngredientsIndex(values []string) []int {
+	var newValues []int
+	stmt := "insert into ingredientsindex(value) values($1) RETURNING id;"
+	for i := 0; i < len(values); i++ {
+		var newValue int
+		row := db.QueryRow("select id from ingredientsindex where value = $1", values[i])
+		err := row.Scan(&newValue)
+		if err != nil {
+			logError(err)
+			//		fmt.Println("Trying to Insert")
+			err2 := db.QueryRow(stmt, values[i]).Scan(&newValue)
+			if err2 != nil {
+				//			fmt.Println("Error 11")
+				logError(err2)
+			} else {
+				//fmt.Println(newValue)
+				newValues = append(newValues, newValue)
+			}
+		} else {
+			newValues = append(newValues, newValue)
+		}
+	}
+	return newValues
+}
+func getSourceValueIndex(values []string) []int {
+	var newValues []int
+	stmt := "insert into sourcingvalueindex(value) values ( $1) RETURNING id;"
+	//fmt.Println("Inside Sourcing values ")
+	for i := 0; i < len(values); i++ {
+		//fmt.Println(values[i])
+		var newValue int
+		row := db.QueryRow("select id from sourcingvalueindex where value = $1", values[i])
+		err := row.Scan(&newValue)
+		if err != nil {
+			logError(err)
+			//		fmt.Println("Trying to Insert SV")
+			err2 := db.QueryRow(stmt, values[i]).Scan(&newValue)
+			if err2 != nil {
+				//			fmt.Println("Error 11 SV ")
+				logError(err2)
+			} else {
+				//			fmt.Println(newValue)
+				newValues = append(newValues, newValue)
+			}
+		} else {
+			newValues = append(newValues, newValue)
+		}
+	}
+	//fmt.Print("Returning values SV index search ")
+	//fmt.Println(newValues)
+	return newValues
+}
+func validateParenthesis(values []string) []string {
+	var newValues []string
+	for j := 0; j < len(values); j++ {
+		if strings.Count(values[j], "(") != strings.Count(values[j], ")") {
+			if j+1 != len(values) {
+				values[j+1] = values[j] + values[j+1]
+				continue
+			}
+		}
+		newValues = append(newValues, values[j])
+	}
+	return newValues
+}
+func insertIntoDB(products []models.Product) {
+	for i := 0; i < len(products); i++ {
+		insertStringValuesToDB(products[i])
+		insertIngredients(products[i].ProductId, products[i].Ingredients)
+		insertSourceValue(products[i].ProductId, products[i].SourcingValues)
+	}
+}
+func insertStringValuesToDB(product models.Product) {
+	id := 0
+	stmt := "insert into products (id, name, image_open, image_closed, description, story, allergy_info, dietary_certifications) values($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;"
+	err := db.QueryRow(stmt, product.ProductId, product.Name, product.ImageOpen, product.ImageClosed, product.Description, product.Story, product.AllergyInfo, product.DietaryCertifications).Scan(&id)
+	if err != nil {
+		fmt.Print("ERRor 3 ")
+		fmt.Println(err)
+	}
+}
+func insertSourceValue(id string, values []string) {
+	stmt := "insert into sourcing_values (product_id, value_id) values($1, $2) RETURNING id;"
+	row_id := 0
+	values = validateParenthesis(values)
+	//fmt.Print("Validate parenthses")
+	//fmt.Println(values)
+	newValues := getSourceValueIndex(values)
+	//fmt.Print("SOurcing VAlues  ")
+	//fmt.Println(newValues)
+	for j := 0; j < len(newValues); j++ {
+		err := db.QueryRow(stmt, id, newValues[j]).Scan(&row_id)
+		if err != nil {
+			fmt.Print("ERRor 2 ")
+			logError(err)
+		}
+	}
+}
+func insertIngredients(id string, values []string) {
+	row_id := 0
+	stmt := "insert into ingredients (product_id, value_id) values($1, $2) RETURNING id;"
+	values = validateParenthesis(values)
+	newValues := getIngredientsIndex(values)
+	//fmt.Println(newValues)
+	for j := 0; j < len(newValues); j++ {
+		err := db.QueryRow(stmt, id, newValues[j]).Scan(&row_id)
+		if err != nil {
+			fmt.Print("ERRor 1 ")
+			fmt.Println(err)
+		}
+	}
+}
 func uploadJSONdataToDB() {
 	file, _ := ioutil.ReadFile("icecream.json")
 	var newProduct []models.Product
 	_ = json.Unmarshal([]byte(file), &newProduct)
-	for i := 0; i < len(newProduct); i++ {
+	insertIntoDB(newProduct)
+
+	/*for i := 0; i < len(newProduct); i++ {
 		id := 0
 		curr := newProduct[i]
 		stmt := "insert into product (id, name, image_open, image_closed, description, story, allergy_info, dietary_certifications) values($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;"
@@ -55,12 +170,13 @@ func uploadJSONdataToDB() {
 				fmt.Println(err)
 			}
 		}
-	}
+	}*/
 
 }
 
 func main() {
 	db = driver.ConnectDB()
+	//uploadJSONdataToDB()
 	router := mux.NewRouter()
 
 	controller := controllers.Controller{}
@@ -72,6 +188,7 @@ func main() {
 
 	router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.GetProducts(db))).Methods("GET")
 	router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.GetProduct(db))).Methods("GET")
+	//router.HandleFunc("/products/{id}", controller.GetProduct(db)).Methods("GET")
 	router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.AddProduct(db))).Methods("POST")
 	router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.UpdateProduct(db))).Methods("PUT")
 	router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.RemoveProduct(db))).Methods("DELETE")

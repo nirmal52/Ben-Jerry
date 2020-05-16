@@ -11,7 +11,7 @@ create table users (
   password text not null
 );
 
-create table product (
+create table products (
   id serial primary key,
   name text,
   image_open text,
@@ -21,20 +21,42 @@ create table product (
   allergy_info text,
   dietary_certifications text
 );
+
+CREATE TABLE ingredientsindex (
+	id serial primary key,
+  value text NOT NULL
+);
+
+CREATE TABLE sourcingvalueindex (
+	id serial primary key,
+  value text NOT NULL
+);
  
  CREATE TABLE sourcing_values (
-	s_id serial NOT NULL,
-	product_id INTEGER,
-  value text NOT NULL,
-	PRIMARY KEY (s_id, product_id),
-	FOREIGN KEY (product_id) REFERENCES product (id)
+    id serial NOT NULL,
+    product_id INTEGER,
+    value_id INTEGER NOT NULL,
+    PRIMARY KEY (product_id, value_id),
+    FOREIGN KEY (product_id) REFERENCES products (id),
+    FOREIGN KEY (value_id) REFERENCES sourcingvalueindex (id)
 );
 
 
 CREATE TABLE ingredients (
-	i_id serial NOT NULL,
+	id serial NOT NULL,
 	product_id INTEGER,
-  value text NOT NULL,
-	PRIMARY KEY (i_id, product_id),
-	FOREIGN KEY (product_id) REFERENCES product (id)
+  value_id INTEGER NOT NULL,
+	PRIMARY KEY (product_id, value_id),
+	FOREIGN KEY (product_id) REFERENCES products (id),
+  FOREIGN KEY (value_id) REFERENCES ingredientsindex (id)
 );
+
+
+drop table users;
+drop table products;
+drop table ingredients;
+drop table sourcing_values;
+drop table sourcingvalueindex;
+drop table ingredientsindex;
+
+

@@ -82,10 +82,13 @@ func (c Controller) RemoveProduct(db *sql.DB) http.HandlerFunc {
 func (c Controller) UpdateProduct(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var product models.Product
+		params := mux.Vars(r)
 		json.NewDecoder(r.Body).Decode(&product)
 
+		id := params["id"]
+
 		productRepo := productRepository.ProductRepository{}
-		rowsUpdated := productRepo.UpdateProduct(db, product)
+		rowsUpdated := productRepo.UpdateProduct(db, id, product)
 
 		json.NewEncoder(w).Encode(rowsUpdated)
 	}
