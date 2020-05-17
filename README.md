@@ -53,6 +53,76 @@
 
 ## Architecural Decision
 
+Table Definition is given below:
+
+Product Table will hold the string fields
+Ingredients Table will hold ( Product ID, Ingredient ID)
+SourcingValue Table will hold ( Product ID, Sourcing Value ID) 
+IngredientIndex Table will (Ingredient ID, Value)
+SourcingValue Table will (Sourcing Value ID, Value)
+
+
+### Design Choices Considered
+
+Efficient Storage and Retrieval of values based on the Values ( Ingredients , Sourcing Values) by keeping in Separate Tables
+
+
+PreProcess of Values in Ingredients :
+
+"butter (cream","salt)"   - Instead of saving 2 values , mapped to Single value in table "butter (cream salt) 
+
+
+"liquid sugar (sugar","water)" - mapped to "liquid sugar (sugar water )
+
+Database Used: Posgress SQL ( Used PostgreSQL as a Service , Elephant SQL ) - DB instance is up and running - Testing is possible by running application locally  
+
+## How Ingredients / Sourcing Values are updated since it is kept in two tables
+
+Old Values : Array of Ingredients present in DB
+New Values : Array of Ingredients given to the endpoint
+
+Compare Old Values and New Values :
+
+Make a Decision on Which Values to be Deleted 
+Make a Decision on Which Values to be Inserted 
+Make a Decision on Which Values not touched
+
+Example :
+
+Old Values : "ingredients": [
+    _"cream",_
+    _"skim milk",_
+    _"liquid sugar",_
+    _"water",_
+    __"sugar",__
+    __"coconut oil" ]__
+    
+ New Values : "ingredients": [
+    _"cream",_
+    _"skim milk",_
+    _"liquid sugar",_
+    _"water",_
+    __"black sugar",__
+    __"coco powder"__
+    ]
+    
+  Rows Untouched during Update :  [ "cream" , "skim milk" , "liquid sugar", "water" ]
+  
+  Rows to be Deleted:   [ "sugar", "coconut oil" ]
+  
+  Rows to be Inserted: ["black sugar", "coco powder" ]
+  
+  
+  
+  If the indexes are available for black sugar and coco powder in the ingredients index table , update only ingredients table
+  
+  If the indexs are not available for black sugar and coco powder in the ingredients index table , create entries for black sugar and coco powder in the ingredients table and then update the ingredients table
+  
+  ----------------
+
+
+
+
 ### Table Definition 
 
 
@@ -100,6 +170,8 @@ List of APIs supported
 
 Response : JSON Array
 
+_While testing it took 1.5 min to get all the values_
+
 ### GET Product by id
 
 [GET] /products/{:id}
@@ -140,5 +212,125 @@ Response:  0 - No change  , 1 - Element updated
 Request Parameter: id
 
 Response:  0 - No change  , 1 - Element updated
+
+
+
+## Additional APIs provided for Each Values :
+
+### Read Product Name for Product ID
+[GET]  /products/{:id}/name
+
+### Update Product Name for Product ID
+[PUT] /products/{:id"}/name
+
+Request Body:  { "name" : value } 
+
+
+### Read Product Image_open for Product ID
+[GET]  /products/{:id}/image_open
+
+### Update Product Image_open for Product ID
+[PUT] /products/{:id"}/image_open
+
+Request Body:  { "image_open" : value } 
+
+### Read Product Image_closed for Product ID
+[GET]  /products/{:id}/image_closed
+
+### Update Product Image_open for Product ID
+[PUT] /products/{:id"}/image_closed
+
+Request Body:  { "image_closed" : value } 
+
+
+
+### Read Product Description for Product ID
+[GET]  /products/{:id}/description
+
+### Update Product Description for Product ID
+[PUT] /products/{:id"}/description
+
+Request Body:  { "description" : value } 
+
+
+### Read Product Story for Product ID
+[GET]  /products/{:id}/story
+
+### Update Product Story for Product ID
+[PUT] /products/{:id"}/story
+
+Request Body:  { "story" : value } 
+
+
+### Read Product Dietary Certification for Product ID
+[GET]  /products/{:id}/diet
+
+### Update Product Dietary Certification for Product ID
+[PUT] /products/{:id"}/diet
+
+Request Body:  { "dietary_certifications" : value } 
+
+
+### Read Product Allergy Info for Product ID
+[GET]  /products/{:id}/allergy
+
+### Update Product Allergy Info for Product ID
+[PUT] /products/{:id"}/allergy
+
+Request Body:  { "allergy_info" : value } 
+
+
+### Read Product Ingredients for Product ID
+[GET]  /products/{:id}/ingredients
+Response : { "ingredients" : Array of Strings } 
+
+
+
+### Update Product Ingredients for Product ID
+[PUT] /products/{:id"}/ingredients
+
+Request Body:  { "ingredients" : Array of Strings } 
+
+
+
+
+### Read Product Sourcing Value for Product ID
+[GET]  /products/{:id}/sourcingvalue
+Response : { "sourcing_value" : Array of Strings } 
+
+
+
+### Update Product Ingredients for Product ID
+[PUT] /products/{:id"}/ingredients
+
+Request Body:  { "sourcing_value" : Array of Strings } 
+
+
+## Testing
+
+Using PostMan -- Added postman collection to the zip 
+Using Go Test
+Manual Testing
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
