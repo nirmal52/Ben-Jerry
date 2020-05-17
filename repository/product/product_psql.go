@@ -157,8 +157,8 @@ func insertSourceValue(db *sql.DB, id string, values []string) {
 	for j := 0; j < len(newValues); j++ {
 		err := db.QueryRow(stmt, id, newValues[j]).Scan(&row_id)
 		if err != nil {
-			fmt.Print("ERRor 2 ")
-			logFatal(err, "insert SourceValue")
+			fmt.Print("ERRor 2 Source Values")
+			logFatal(err, stmt)
 		}
 	}
 }
