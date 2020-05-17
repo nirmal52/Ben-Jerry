@@ -1,7 +1,9 @@
 # Ben-Jerry
-##Building an API for Ben &amp; Jerry's fans
+
+## Building an API for Ben &amp; Jerry's fans
 
 ### Objects handled:  JSON array of below structure
+
 ```
 {
   "name": "Vanilla Toffee Bar Crunch",
@@ -51,15 +53,63 @@
 
 ## Architecural Decision
 
-### Table Products 
-
-First Header |
--------------|
-Cell 1|
-Cell 2|
-Cell 3|
+### Table Definition 
 
 
+Users |  Products  |
+-------------|------|
+id|  id (PK) |
+email| name |
+password| image_open |
+|| image_close |
+|| description |
+|| story |
+|| allergy_info |
+|| dietary_certifications |
 
 
+
+ingredientsindex | sourcingvalueindex |
+-----------------|--------------------|
+id (PK) | id (PK) |
+value (text) | value (text) |
+
+
+
+
+ingredients | sourcing_values |
+-------------|-----------------|
+id | id |
+product_id | product_id | 
+value_id | value_id | 
+PRIMARY KEY (product_id, value_id) |PRIMARY KEY (product_id, value_id) |
+FOREIGN KEY (product_id) REFERENCES products (id) |FOREIGN KEY (product_id) REFERENCES products (id) |
+FOREIGN KEY (value_id) REFERENCES ingredientsindex (id) |FOREIGN KEY (value_id) REFERENCES sourcingvalueindex (id)|
+
+
+
+
+
+
+## API Definition
+List of APIs supported
+
+### GET ALL Products
+
+[GET] /products 
+
+### GET Product by id
+
+[GET] /products/{:id}
+
+### CREATE Product by id
+[POST] /products/{:id}
+
+
+### UPDATE Product by id
+[PUT] /products/{:id}
+
+
+### DELETE Product by id
+[DELETE] /products/{:id}
 

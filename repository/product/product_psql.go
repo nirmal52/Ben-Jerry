@@ -102,14 +102,10 @@ func getIngredientsIndex(db *sql.DB, values []string) []int {
 		row := db.QueryRow("select id from ingredientsindex where value = $1", values[i])
 		err := row.Scan(&newValue)
 		if err != nil {
-			logFatal(err, "Get ingredients index")
-			//		fmt.Println("Trying to Insert")
 			err2 := db.QueryRow(stmt, values[i]).Scan(&newValue)
 			if err2 != nil {
-				//			fmt.Println("Error 11")
 				logFatal(err2, "Get ingredients index")
 			} else {
-				//fmt.Println(newValue)
 				newValues = append(newValues, newValue)
 			}
 		} else {
@@ -126,13 +122,10 @@ func getSourceValueIndex(db *sql.DB, values []string) []int {
 		row := db.QueryRow("select id from sourcingvalueindex where value = $1", values[i])
 		err := row.Scan(&newValue)
 		if err != nil {
-			logFatal(err, "getSourceValueIndex ")
 			err2 := db.QueryRow(stmt, values[i]).Scan(&newValue)
 			if err2 != nil {
-				//			fmt.Println("Error 11 SV ")
-				logFatal(err2, "getSourceValueIndex")
+				logFatal(err, "getSourceValueIndex")
 			} else {
-				//			fmt.Println(newValue)
 				newValues = append(newValues, newValue)
 			}
 		} else {

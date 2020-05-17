@@ -16,7 +16,7 @@ import (
 	//"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-// @title Ben - Jerry API
+// @title Swagger Swagger Example API
 // @version 1.0
 // @description This is a sample server celler server.
 // @termsOfService http://swagger.io/terms/
@@ -29,7 +29,7 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8080
-// @BasePath ""
+// @BasePath /api/v1
 
 // @securityDefinitions.basic BasicAuth
 
@@ -77,7 +77,7 @@ func main() {
 
 	controller := controllers.Controller{}
 
-	docs.SwaggerInfo.Title = "BEN JERRY API v1"
+	docs.SwaggerInfo.Title = "BEN JERRY API v2"
 
 	router.HandleFunc("/signup", controller.Signup(db)).Methods("POST")
 	router.HandleFunc("/login", controller.Login(db)).Methods("POST")

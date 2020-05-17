@@ -6,7 +6,6 @@ import (
 	"ben-jerry/utils"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -70,12 +69,12 @@ func (c Controller) AddProduct(db *sql.DB) http.HandlerFunc {
 
 		productRepo := productRepository.ProductRepository{}
 		returnID := productRepo.AddProduct(db, product)
-		fmt.Print("REturned ID")
-		fmt.Println(returnID)
+		//fmt.Print("REturned ID")
+		//fmt.Println(returnID)
 		productCreated := map[string]interface{}{
 			"productID": returnID,
 		}
-		log.Println(productCreated)
+		//log.Println(productCreated)
 		utils.ResponseJSON(w, productCreated)
 	}
 }

@@ -115,6 +115,7 @@ func createNewProduct() models.Product {
 	4. Compare both the object of POST and GET
 */
 func Test_AddandCompareProduct(t *testing.T) {
+	// create product
 	product := createNewProduct()
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(product)

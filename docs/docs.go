@@ -95,7 +95,7 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "localhost:8080",
-	BasePath:    "/api/v1",
+	BasePath:    "\"\"",
 	Schemes:     []string{},
 	Title:       "Ben - Jerry API",
 	Description: "This is a sample server celler server.",
