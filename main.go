@@ -2,6 +2,7 @@ package main
 
 import (
 	"ben-jerry/controllers"
+	"ben-jerry/docs"
 	"ben-jerry/driver"
 	"ben-jerry/models"
 	"ben-jerry/utils"
@@ -13,11 +14,10 @@ import (
 	"net/http"
 	"strings"
 
-	"ben-jerry/docs"
-
 	"github.com/gorilla/mux"
 	"github.com/subosito/gotenv"
 	httpSwagger "github.com/swaggo/http-swagger"
+	//"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // @title Ben - Jerry API
@@ -274,3 +274,77 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
+
+/*
+func main() {
+	db = driver.ConnectDB()
+	//uploadJSONdataToDB()
+	r := gin.Default()
+
+	c := controllers.Controller{}
+
+	docs.SwaggerInfo.Title = "BEN JERRY API v1"
+
+	v1 := r.Group("api/v1")
+	{
+		products := v1.Group("/products")
+		{
+			//products.GET(":id", utils.TokenVerifyMiddleWare(conProtected(db)) )
+			products.GET("", utils.TokenVerifyMiddleWare(c.GetProducts(db)))
+			/*products.POST("", c.AddAccount)
+			products.DELETE(":id", c.DeleteAccount)
+			products.PATCH(":id", c.UpdateAccount)
+			products.POST(":id/images", c.UploadAccountImage)*/
+/*	}
+	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.Run(":8080")
+
+	/*
+		router.HandleFunc("/signup", controller.Signup(db)).Methods("POST")
+		router.HandleFunc("/login", controller.Login(db)).Methods("POST")
+
+		router.HandleFunc("/protectedEndpoint", utils.TokenVerifyMiddleWare(controller.Protected(db))).Methods("GET")
+
+		router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.GetProducts(db))).Methods("GET")
+		router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.GetProduct(db))).Methods("GET")
+		//router.HandleFunc("/products/{id}", controller.GetProduct(db)).Methods("GET")
+		router.HandleFunc("/products", utils.TokenVerifyMiddleWare(controller.AddProduct(db))).Methods("POST")
+		router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.UpdateProduct(db))).Methods("PUT")
+		router.HandleFunc("/products/{id}", utils.TokenVerifyMiddleWare(controller.RemoveProduct(db))).Methods("DELETE")
+
+		router.HandleFunc("/products/{id}/name", utils.TokenVerifyMiddleWare(controller.GetProductName(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/name", utils.TokenVerifyMiddleWare(controller.UpdateProductName(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/image_open", utils.TokenVerifyMiddleWare(controller.GetProductImageOpen(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/image_open", utils.TokenVerifyMiddleWare(controller.UpdateProductImageOpen(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/image_closed", utils.TokenVerifyMiddleWare(controller.GetProductImageClose(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/image_closed", utils.TokenVerifyMiddleWare(controller.UpdateProductImageClose(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/description", utils.TokenVerifyMiddleWare(controller.GetProductDescription(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/description", utils.TokenVerifyMiddleWare(controller.UpdateProdutDdescription(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/story", utils.TokenVerifyMiddleWare(controller.GetProductStory(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/story", utils.TokenVerifyMiddleWare(controller.UpdateProductStory(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/allergy", utils.TokenVerifyMiddleWare(controller.GetProductAllergy(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/allergy", utils.TokenVerifyMiddleWare(controller.UpdateProductAllergy(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/diet", utils.TokenVerifyMiddleWare(controller.GetProductDiet(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/diet", utils.TokenVerifyMiddleWare(controller.UpdateProductDiet(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/ingredients", utils.TokenVerifyMiddleWare(controller.GetProductIngredients(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/ingredients", utils.TokenVerifyMiddleWare(controller.UpdateProductIngredients(db))).Methods("PUT")
+
+		router.HandleFunc("/products/{id}/sourcingvalue", utils.TokenVerifyMiddleWare(controller.GetProductSourcingValues(db))).Methods("GET")
+		router.HandleFunc("/products/{id}/sourcingvalue", utils.TokenVerifyMiddleWare(controller.UpdateProductSourcingValues(db))).Methods("PUT")
+
+		//router.HandleFunc("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)).Methods("GET")
+		//router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler(swaggerFiles.Handler))
+		//router.PathPrefix("/").Handler(httpSwagger.WrapHandler)
+		router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+
+		log.Fatal(http.ListenAndServe(":8000", router))*/
+
+///}
