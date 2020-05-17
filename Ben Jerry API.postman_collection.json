@@ -1,0 +1,899 @@
+{
+	"info": {
+		"_postman_id": "d629d5ba-1576-421b-abdf-124846914122",
+		"name": "Ben Jerry API",
+		"description": "# Ben-Jerry\r\n##Building an API for Ben &amp; Jerry's fans\r\n\r\n### Objects handled:  JSON array of below structure\r\n```\r\n{\r\n  \"name\": \"Vanilla Toffee Bar Crunch\",\r\n  \"image_closed\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/vanilla-toffee-landing.png\",\r\n  \"image_open\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/vanilla-toffee-landing-open.png\",\r\n  \"description\": \"Vanilla Ice Cream with Fudge-Covered Toffee Pieces\",\r\n  \"story\": \"Vanilla What Bar Crunch? We gave this flavor a new name to go with the new toffee bars we’re using as part of our commitment to source Fairtrade Certified and non-GMO ingredients. We love it and know you will too!\",\r\n  \"sourcing_values\": [\r\n    \"Non-GMO\",\r\n    \"Cage-Free Eggs\",\r\n    \"Fairtrade\",\r\n    \"Responsibly Sourced Packaging\",\r\n    \"Caring Dairy\"\r\n  ],\r\n  \"ingredients\": [\r\n    \"cream\",\r\n    \"skim milk\",\r\n    \"liquid sugar\",\r\n    \"water\",\r\n    \"sugar\",\r\n    \"coconut oil\",\r\n    \"egg yolks\",\r\n    \"butter\",\r\n    \"vanilla extract\",\r\n    \"almonds\",\r\n    \"cocoa (processed with alkali)\",\r\n    \"milk\",\r\n    \"soy lecithin\",\r\n    \"cocoa\",\r\n    \"natural flavor\",\r\n    \"salt\",\r\n    \"vegetable oil\r\n    \"guar gum\",\r\n    \"carrageenan\"\r\n  ],\r\n  \"allergy_info\": \"may contain wheat, peanuts and other tree nuts\",\r\n  \"dietary_certifications\": \"Kosher\",\r\n  \"productId\": \"646\"\r\n}\r\n```\r\n## Tasks Implemented\r\n\r\n- Implemented a REST API with CRUD functionality with PosgressSQL as DB \r\n- Authenicated using JWT token \r\n- Documentation done using Swagger ( // Swagger json is not created properly at the time of writing )\r\n- Extensive Testing is done using Post Main, Go Test and manual testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign Up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"email\" : \"nirmal1234@gmail.com\",\n \"password\" : \"nirmal\"\n }"
+				},
+				"url": {
+					"raw": "http://localhost:8000/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"signup"
+					]
+				},
+				"description": "Login Page"
+			},
+			"response": []
+		},
+		{
+			"name": "Log In ",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"email\" : \"nirmal1234@gmail.com\",\n \"password\" : \"nirmal\"\n }"
+				},
+				"url": {
+					"raw": "http://localhost:8000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"login"
+					]
+				},
+				"description": "User Login \r\nRequest : { user , password}\r\nResponse : { token }  \r\n    if user found  , return token\r\n    else bad request "
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/products/623",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"623"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Everything But The..New \",\r\n    \"image_closed\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing.png\",\r\n    \"image_open\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing-open.png\",\r\n    \"description\": \"A Collision of Chocolate & Vanilla Ice Creams mixed with Peanut Butter Cups, Fudge-Covered Toffee Pieces, White Chocolatey Chunks & Fudge-Covered Almonds\",\r\n    \"story\": \"We've combined some of your most favorite Ben & Jerry's flavors & swirled them into even bigger show-stoppers. Now you can enjoy them in tasty, twisted tandem!\",\r\n    \"sourcing_values\": [\r\n        \"Non-GMO\",\r\n        \"Cage-Free Eggs\",\r\n        \"Fairtrade\",\r\n        \"Responsibly Sourced Packaging\",\r\n        \"Caring Dairy\"\r\n    ],\r\n    \"ingredients\": [\r\n        \"cream\",\r\n        \"skim milk\",\r\n        \"water\",\r\n        \"liquid sugar (sugarwater)\",\r\n        \"sugar\",\r\n        \"coconut oil\",\r\n        \"egg yolks\",\r\n        \"dried cane syrup\",\r\n        \"cocoa (processed with alkali)\",\r\n        \"natural flavors\",\r\n        \"cocoa\",\r\n        \"guar gum\",\r\n        \"butteroil\",\r\n        \"salt\",\r\n        \"soy lecithin\",\r\n        \"carrageenan\",\r\n        \"vanilla extract\",\r\n        \"butter (creamsalt)\",\r\n        \"milk\",\r\n        \"milk fat\",\r\n        \"peanuts\",\r\n        \"partially defatted peanut flour\",\r\n        \"almonds\",\r\n        \"vegetable oil (canolasafflowerand/or sunflower oil)\",\r\n        \"roasted almonds (almondspeanut oil)\",\r\n        \"corn maltodextrin\"\r\n    ],\r\n    \"allergy_info\": \"may contain wheat and other tree nuts\",\r\n    \"dietary_certifications\": \"Kosher\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE PRODUCT VALUES",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Prodict VID 17 \",\r\n    \"image_closed\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing.png\",\r\n    \"image_open\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing-open.png\",\r\n    \"description\": \"A Collision of Chocolate & Vanilla Ice Creams mixed with Peanut Butter Cups, Fudge-Covered Toffee Pieces, White Chocolatey Chunks & Fudge-Covered Almonds\",\r\n    \"story\": \"We've combined some of your most favorite Ben & Jerry's flavors & swirled them into even bigger show-stoppers. Now you can enjoy them in tasty, twisted tandem!\",\r\n    \"sourcing_values\": [\r\n        \"Non-GMO\",\r\n        \"Cage-Free Eggs\",\r\n        \"Fairtrade\",\r\n        \"Responsibly Sourced Packaging\",\r\n        \"Caring Dairy\"\r\n    ],\r\n    \"ingredients\": [\r\n        \"cream\",\r\n        \"skim milk\",\r\n        \"water\",\r\n        \"liquid sugar (sugarwater)\",\r\n        \"sugar\",\r\n        \"coconut oil\",\r\n        \"egg yolks\",\r\n        \"dried cane syrup\",\r\n        \"cocoa (processed with alkali)\",\r\n        \"natural flavors\",\r\n        \"cocoa\",\r\n        \"guar gum\",\r\n        \"butteroil\",\r\n        \"salt\",\r\n        \"soy lecithin\",\r\n        \"carrageenan\",\r\n        \"vanilla extract\",\r\n        \"butter (creamsalt)\",\r\n        \"milk\",\r\n        \"milk fat\",\r\n        \"peanuts\",\r\n        \"partially defatted peanut flour\",\r\n        \"almonds\",\r\n        \"vegetable oil (canolasafflowerand/or sunflower oil)\",\r\n        \"roasted almonds (almondspeanut oil)\",\r\n        \"corn maltodextrin\"\r\n    ],\r\n    \"allergy_info\": \"may contain wheat and other tree nuts\",\r\n    \"dietary_certifications\": \"Kosher\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/17",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"17"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product by ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Prodict VID 17 \",\r\n    \"image_closed\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing.png\",\r\n    \"image_open\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing-open.png\",\r\n    \"description\": \"A Collision of Chocolate & Vanilla Ice Creams mixed with Peanut Butter Cups, Fudge-Covered Toffee Pieces, White Chocolatey Chunks & Fudge-Covered Almonds\",\r\n    \"story\": \"We've combined some of your most favorite Ben & Jerry's flavors & swirled them into even bigger show-stoppers. Now you can enjoy them in tasty, twisted tandem!\",\r\n    \"sourcing_values\": [\r\n        \"Non-GMO\",\r\n        \"Cage-Free Eggs\",\r\n        \"Fairtrade\",\r\n        \"Responsibly Sourced Packaging\",\r\n        \"Caring Dairy\"\r\n    ],\r\n    \"ingredients\": [\r\n        \"cream\",\r\n        \"skim milk\",\r\n        \"water\",\r\n        \"liquid sugar (sugarwater)\",\r\n        \"sugar\",\r\n        \"coconut oil\",\r\n        \"egg yolks\",\r\n        \"dried cane syrup\",\r\n        \"cocoa (processed with alkali)\",\r\n        \"natural flavors\",\r\n        \"cocoa\",\r\n        \"guar gum\",\r\n        \"butteroil\",\r\n        \"salt\",\r\n        \"soy lecithin\",\r\n        \"carrageenan\",\r\n        \"vanilla extract\",\r\n        \"butter (creamsalt)\",\r\n        \"milk\",\r\n        \"milk fat\",\r\n        \"peanuts\",\r\n        \"partially defatted peanut flour\",\r\n        \"almonds\",\r\n        \"vegetable oil (canolasafflowerand/or sunflower oil)\",\r\n        \"roasted almonds (almondspeanut oil)\",\r\n        \"corn maltodextrin\"\r\n    ],\r\n    \"allergy_info\": \"may contain wheat and other tree nuts\",\r\n    \"dietary_certifications\": \"Kosher\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/17",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"17"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Name for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Prodict VID 17 \",\r\n    \"image_closed\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing.png\",\r\n    \"image_open\": \"/files/live/sites/systemsite/files/flavors/products/us/pint/open-closed-pints/everything-but-the-landing-open.png\",\r\n    \"description\": \"A Collision of Chocolate & Vanilla Ice Creams mixed with Peanut Butter Cups, Fudge-Covered Toffee Pieces, White Chocolatey Chunks & Fudge-Covered Almonds\",\r\n    \"story\": \"We've combined some of your most favorite Ben & Jerry's flavors & swirled them into even bigger show-stoppers. Now you can enjoy them in tasty, twisted tandem!\",\r\n    \"sourcing_values\": [\r\n        \"Non-GMO\",\r\n        \"Cage-Free Eggs\",\r\n        \"Fairtrade\",\r\n        \"Responsibly Sourced Packaging\",\r\n        \"Caring Dairy\"\r\n    ],\r\n    \"ingredients\": [\r\n        \"cream\",\r\n        \"skim milk\",\r\n        \"water\",\r\n        \"liquid sugar (sugarwater)\",\r\n        \"sugar\",\r\n        \"coconut oil\",\r\n        \"egg yolks\",\r\n        \"dried cane syrup\",\r\n        \"cocoa (processed with alkali)\",\r\n        \"natural flavors\",\r\n        \"cocoa\",\r\n        \"guar gum\",\r\n        \"butteroil\",\r\n        \"salt\",\r\n        \"soy lecithin\",\r\n        \"carrageenan\",\r\n        \"vanilla extract\",\r\n        \"butter (creamsalt)\",\r\n        \"milk\",\r\n        \"milk fat\",\r\n        \"peanuts\",\r\n        \"partially defatted peanut flour\",\r\n        \"almonds\",\r\n        \"vegetable oil (canolasafflowerand/or sunflower oil)\",\r\n        \"roasted almonds (almondspeanut oil)\",\r\n        \"corn maltodextrin\"\r\n    ],\r\n    \"allergy_info\": \"may contain wheat and other tree nuts\",\r\n    \"dietary_certifications\": \"Kosher\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"name"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product Name for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Prodict VID 17 PORUD 2189\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"name"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Image open for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2190/image_open",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2190",
+						"image_open"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Image open for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"image_open\": \"image open for Product 2189\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/image_open",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"image_open"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Image Close for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"image_closed\": \"image closed for Product 2189\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/image_open",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"image_open"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Image Close for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2190/image_open",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2190",
+						"image_open"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product Description for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\" : \"Descriptipn Prodict VID 17 PORUD 2189\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/description",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"description"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Description for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/description",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"description"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product Allergy for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"allergy_info\": \"Prodict VID 17 PORUD 2189 Allergy infor\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/allergy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"allergy"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Allergy for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/allergy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"allergy"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product Story for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"story\": \"Prodict VID 17 PORUD 2189 story\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/story",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"story"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Story for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/story",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"story"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Dietary Certification for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dietary_certifications\" : \"Diet Prodict VID 17 PORUD 2189\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/diet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"diet"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Dietary Certification for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/diet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"diet"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product Ingredients for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ingredients\": [\"IG1\" , \"IG2\"]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"ingredients"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Ingredients for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ingredients\": [\"IG1\" , \"IG2\"]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2190/ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2190",
+						"ingredients"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product Sourcing value for Product ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sourcing_values\": [\"SV1\" , \"SV2\"]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2189/sourcingvalue",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2189",
+						"sourcingvalue"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Sourcing value for Product ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcm1hbDEyMzRAZ21haWwuY29tIiwiaXNzIjoiY291cnNlIn0.yaamhw2Xj-kOnMNDu1XUnzP41RQIJMxBe6nKHBX63mE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/2190/sourcingvalue",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"2190",
+						"sourcingvalue"
+					]
+				},
+				"description": "Products in the database ( 51 products)\r\nTakes a more time than expected to get the values\r\n51 * 8 * (2 * 10)\r\n\r\n51 - product values\r\n7 - String values\r\n2 - Array of string values\r\n\r\n\r\n\r\nSave Token received from Log-In under Authorization  \r\nBear Token - Token value\r\n\r\nIf Token -Invalid .. Status Unauthorized\r\n\r\nIf Token - Valid .. Return all the products"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

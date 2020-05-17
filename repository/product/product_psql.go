@@ -184,7 +184,7 @@ func (p ProductRepository) AddProduct(db *sql.DB, product models.Product) int {
 		logFatal(err, "Add Product")
 	}
 	id_str := strconv.Itoa(id)
-	fmt.Println("new id  " + id_str)
+	//fmt.Println("new id  " + id_str)
 	insertIngredients(db, id_str, product.Ingredients)
 	insertSourceValue(db, id_str, product.SourcingValues)
 	logFatal(err, "Add product ")
@@ -249,7 +249,9 @@ func updateIngredients(db *sql.DB, id string, newValues []string) {
 			toBeAdded = append(toBeAdded, newValues[i])
 		}
 	}
+	fmt.Print("to be deleted")
 	fmt.Println(toBeDeleted)
+	fmt.Print("to be added")
 	fmt.Println(toBeAdded)
 	deleteIngredientsForUpdate(db, id, toBeDeleted)
 	insertIngredients(db, id, toBeAdded)
@@ -292,7 +294,7 @@ func (p ProductRepository) UpdateProduct(db *sql.DB, productID string, product m
 
 	//	deleteIngredients(db, id)
 	//	deleteSourcingValues(db, id)
-	fmt.Println("Product id")
+	//fmt.Println("Product id")
 	result, err := db.Exec("update products set name=$1,image_open =$2, image_closed=$3, description = $4, story = $5, allergy_info = $6, dietary_certifications = $7  where id=$8 RETURNING id",
 		&product.Name, &product.ImageOpen, &product.ImageClosed, &product.Description, &product.Story, &product.AllergyInfo, &product.DietaryCertifications, &productID)
 
@@ -306,7 +308,7 @@ func (p ProductRepository) UpdateProduct(db *sql.DB, productID string, product m
 	//addSourcingValues(db, id, product.SourcingValues)
 
 	rowsUpdated, err := result.RowsAffected()
-	logFatal(err, "update product ")
+	//logFatal(err, "update product ")
 	if err != nil {
 		return 0
 	}
