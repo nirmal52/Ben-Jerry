@@ -74,6 +74,19 @@ func (c Controller) Login(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+// Signup godoc
+// @Summary Adding user
+// @Description add by json account
+// @Tags accounts
+// @Accept  json
+// @Produce  json
+// @Param user body model.User true "Add user"
+// @Success 200 {object} model.Account
+// @Failure 400 {object} httputil.HTTPError
+// @Failure 404 {object} httputil.HTTPError
+// @Failure 500 {object} httputil.HTTPError
+// @Router /signup [post]
+
 func (c Controller) Signup(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user models.User

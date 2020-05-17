@@ -97,7 +97,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "localhost:8080",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "Swagger Example API",
+	Title:       "Ben - Jerry API",
 	Description: "This is a sample server celler server.",
 }
 

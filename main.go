@@ -13,12 +13,14 @@ import (
 	"net/http"
 	"strings"
 
+	"ben-jerry/docs"
+
 	"github.com/gorilla/mux"
 	"github.com/subosito/gotenv"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-// @title Swagger Example API
+// @title Ben - Jerry API
 // @version 1.0
 // @description This is a sample server celler server.
 // @termsOfService http://swagger.io/terms/
@@ -224,6 +226,8 @@ func main() {
 
 	controller := controllers.Controller{}
 
+	docs.SwaggerInfo.Title = "BEN JERRY API v1"
+
 	router.HandleFunc("/signup", controller.Signup(db)).Methods("POST")
 	router.HandleFunc("/login", controller.Login(db)).Methods("POST")
 
@@ -264,6 +268,8 @@ func main() {
 	router.HandleFunc("/products/{id}/sourcingvalue", utils.TokenVerifyMiddleWare(controller.UpdateProductSourcingValues(db))).Methods("PUT")
 
 	//router.HandleFunc("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)).Methods("GET")
+	//router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler(swaggerFiles.Handler))
+	//router.PathPrefix("/").Handler(httpSwagger.WrapHandler)
 	router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 
 	log.Fatal(http.ListenAndServe(":8000", router))
