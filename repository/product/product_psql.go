@@ -191,7 +191,7 @@ func (p ProductRepository) AddProduct(db *sql.DB, product models.Product) int {
 		logFatal(err, "Add Product")
 	}
 	id_str := strconv.Itoa(id)
-	fmt.Println("new id" + id_str)
+	fmt.Println("new id  " + id_str)
 	insertIngredients(db, id_str, product.Ingredients)
 	insertSourceValue(db, id_str, product.SourcingValues)
 	logFatal(err, "Add product ")

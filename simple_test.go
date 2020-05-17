@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"github.com/gorilla/mux"
@@ -16,25 +17,24 @@ import (
 )
 
 var router *mux.Router
+var ts *httptest.Server
 
 func setUpTest() {
 	db = driver.ConnectDB()
 	router = mux.NewRouter()
 	controller := controllers.Controller{}
 
-	router.Handle("/v1/bookmark", controller.SimpleReturn())
-	router.HandleFunc("/endpoint", controller.Protected(db)).Methods("GET")
-	router.HandleFunc("/products/{id}/name", controller.GetProductName(db)).Methods("GET")
+	router.HandleFunc("/products", controller.GetProducts(db)).Methods("GET")
+	router.HandleFunc("/products/{id}", controller.GetProduct(db)).Methods("GET")
 	router.HandleFunc("/products", controller.AddProduct(db)).Methods("POST")
 	router.HandleFunc("/products/{id}", controller.UpdateProduct(db)).Methods("PUT")
-	log.Println("inside setup!")
-
-	//	log.Fatal(http.ListenAndServe(":8000", router))
-	log.Println("listen set")
+	router.HandleFunc("/products/{id}", controller.RemoveProduct(db)).Methods("DELETE")
+	ts = httptest.NewServer(router)
 }
 
 func TestMain(m *testing.M) {
 	setUpTest()
+	defer ts.Close()
 	m.Run()
 }
 
@@ -52,7 +52,7 @@ func TestMain(m *testing.M) {
 		t.Errorf("Expected %d, received %d", http.StatusOK, res.StatusCode)
 	}
 }*/
-func bookmarkIndex(t *testing.T) {
+/*func bookmarkIndex(t *testing.T) {
 	//	controller := controllers.Controller{}
 	log.Println("Book mark index")
 	ts := httptest.NewServer(router)
@@ -70,9 +70,6 @@ func bookmarkIndex(t *testing.T) {
 	}
 }
 
-func createProduct() {
-
-}
 func productName(t *testing.T) {
 	//log.Println("Name")
 	ts := httptest.NewServer(router)
@@ -91,7 +88,7 @@ func productName(t *testing.T) {
 	}
 	assert.Equal(t, expected, newStr, "OK response is expected")
 }
-
+*/
 //var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
 //req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 
@@ -109,29 +106,57 @@ func createNewProduct() models.Product {
 	newProduct.ProductId = "626"
 	return newProduct
 }
-func updateGetProductName(t *testing.T) {
-	//log.Println("Name")
-	ts := httptest.NewServer(router)
-	defer ts.Close()
+
+/*
+	Test Run:
+	1. HTTP POST - Create a new product
+	2. Save response of productID
+	3. HTTP GET -  Try to get the product by ID
+	4. Compare both the object of POST and GET
+*/
+func Test_AddandCompareProduct(t *testing.T) {
 	product := createNewProduct()
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(product)
 	res, err := http.Post(ts.URL+"/products", "application/json", buf)
-	log.Println(ts.URL)
+
+	if err != nil {
+		log.Println(err)
+	}
+
 	resbuf := new(bytes.Buffer)
 	resbuf.ReadFrom(res.Body)
 	response := resbuf.String()
-	log.Println(response)
-	expected := "Chillin' the Roast"
+
+	jsonMap := make(map[string]int)
+	err = json.Unmarshal([]byte(response), &jsonMap)
 	if err != nil {
-		t.Errorf("Expected nil, received %s", err.Error())
+		log.Println(err)
 	}
-	if res.StatusCode != http.StatusOK {
+
+	createdID := strconv.Itoa(jsonMap["productID"])
+	product.ProductId = createdID
+	expected := product
+
+	getResponse, err := http.Get(ts.URL + "/products/" + product.ProductId)
+	if err != nil {
+		log.Println(err)
+	}
+
+	getresbuf := new(bytes.Buffer)
+	getresbuf.ReadFrom(getResponse.Body)
+	productCreated := getresbuf.String()
+
+	var getProduct models.Product
+	json.Unmarshal([]byte(productCreated), &getProduct)
+
+	if getResponse.StatusCode != http.StatusOK {
 		t.Errorf("Expected %d, received %d", http.StatusOK, res.StatusCode)
 	}
-	assert.Equal(t, expected, response, "OK response is expected")
+	assert.Equal(t, expected, getProduct, "OK")
 }
 
+/*
 func Test_PutProductName(t *testing.T) {
 	//log.Println("Name")
 	ts := httptest.NewServer(router)
@@ -155,3 +180,4 @@ func Test_PutProductName(t *testing.T) {
 	}
 	assert.Equal(t, expected, response, "OK response is expected")
 }
+*/
