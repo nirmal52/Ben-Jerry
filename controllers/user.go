@@ -12,8 +12,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-//var users []models.User
-
 func (c Controller) Login(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user models.User
@@ -74,19 +72,6 @@ func (c Controller) Login(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-// Signup godoc
-// @Summary Adding user
-// @Description add by json account
-// @Tags accounts
-// @Accept  json
-// @Produce  json
-// @Param user body model.User true "Add user"
-// @Success 200 {object} model.Account
-// @Failure 400 {object} httputil.HTTPError
-// @Failure 404 {object} httputil.HTTPError
-// @Failure 500 {object} httputil.HTTPError
-// @Router /signup [post]
-
 func (c Controller) Signup(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user models.User
@@ -115,7 +100,7 @@ func (c Controller) Signup(db *sql.DB) http.HandlerFunc {
 		user.Password = string(hash)
 
 		userRepo := userRepository.UserRepository{}
-		user = userRepo.Signup(db, user)
+		user, err = userRepo.Signup(db, user)
 
 		if err != nil {
 			error.Message = "Server error."
@@ -125,9 +110,6 @@ func (c Controller) Signup(db *sql.DB) http.HandlerFunc {
 
 		user.Password = ""
 
-		w.Header().Set("Content-Type", "application/json")
 		utils.ResponseJSON(w, user)
-
-		json.NewEncoder(w).Encode(user)
 	}
 }

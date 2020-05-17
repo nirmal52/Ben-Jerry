@@ -3,6 +3,7 @@ package controllers
 import (
 	"ben-jerry/models"
 	productRepository "ben-jerry/repository/product"
+	"ben-jerry/utils"
 	"database/sql"
 	"encoding/json"
 	"log"
@@ -28,9 +29,8 @@ func (c Controller) GetProducts(db *sql.DB) http.HandlerFunc {
 		products = []models.Product{}
 		productRepo := productRepository.ProductRepository{}
 
-		products = productRepo.GetProducts(db, product, products)
-
-		json.NewEncoder(w).Encode(products)
+		products, _ = productRepo.GetProducts(db, product, products)
+		utils.ResponseJSON(w, products)
 	}
 }
 
@@ -42,11 +42,21 @@ func (c Controller) GetProduct(db *sql.DB) http.HandlerFunc {
 		productRepo := productRepository.ProductRepository{}
 
 		id, err := strconv.Atoi(params["id"])
-		logFatal(err)
+		if err != nil {
+			var er models.Error
+			er.Message = "ID required as int"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
 
-		product = productRepo.GetProduct(db, product, id)
-
-		json.NewEncoder(w).Encode(product)
+		product, err = productRepo.GetProduct(db, product, id)
+		if err != nil {
+			var er models.Error
+			er.Message = "No matching ID found "
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
+		utils.ResponseJSON(w, product)
 	}
 }
 
@@ -60,7 +70,7 @@ func (c Controller) AddProduct(db *sql.DB) http.HandlerFunc {
 		productRepo := productRepository.ProductRepository{}
 		productID = productRepo.AddProduct(db, product)
 
-		json.NewEncoder(w).Encode(productID)
+		utils.ResponseJSON(w, productID)
 	}
 }
 
@@ -71,7 +81,12 @@ func (c Controller) RemoveProduct(db *sql.DB) http.HandlerFunc {
 		productRepo := productRepository.ProductRepository{}
 
 		id, err := strconv.Atoi(params["id"])
-		logFatal(err)
+		if err != nil {
+			var er models.Error
+			er.Message = "ID required as int"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
 
 		rowsDeleted := productRepo.RemoveProduct(db, id)
 
@@ -85,15 +100,155 @@ func (c Controller) UpdateProduct(db *sql.DB) http.HandlerFunc {
 		params := mux.Vars(r)
 		json.NewDecoder(r.Body).Decode(&product)
 
-		id := params["id"]
-
+		id, err := strconv.Atoi(params["id"])
+		if err != nil {
+			var er models.Error
+			er.Message = "ID required as int"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
+		id_str := strconv.Itoa(id)
 		productRepo := productRepository.ProductRepository{}
-		rowsUpdated := productRepo.UpdateProduct(db, id, product)
+		rowsUpdated := productRepo.UpdateProduct(db, id_str, product)
+
+		json.NewEncoder(w).Encode(rowsUpdated)
+	}
+}
+func (c Controller) GetProductDetail(db *sql.DB, field int) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+
+		id, err := strconv.Atoi(params["id"])
+		if err != nil {
+			var er models.Error
+			er.Message = "ID required as int"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
+		productRepo := productRepository.ProductRepository{}
+		value := productRepo.GetProductDetail(db, id, field)
+
+		json.NewEncoder(w).Encode(value)
+	}
+}
+func (c Controller) UpdateProductDetail(db *sql.DB, field int) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+		id, err := strconv.Atoi(params["id"])
+		if err != nil {
+			var er models.Error
+			er.Message = "ID required as int"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
+
+		var product models.Product
+		err = json.NewDecoder(r.Body).Decode(&product)
+		if err != nil {
+			var er models.Error
+			er.Message = "Parsing Error"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
+
+		var newValue string
+
+		if field == 0 {
+			newValue = product.Name
+		} else if field == 1 {
+			newValue = product.ImageOpen
+		} else if field == 2 {
+			newValue = product.ImageClosed
+		} else if field == 3 {
+			newValue = product.Description
+		} else if field == 4 {
+			newValue = product.Story
+		} else if field == 5 {
+			newValue = product.AllergyInfo
+		} else if field == 6 {
+			newValue = product.DietaryCertifications
+		} else {
+			var er models.Error
+			er.Message = "Field value exceeded"
+			utils.RespondWithError(w, http.StatusBadRequest, er)
+			return
+		}
+
+		log.Println(newValue)
+		productRepo := productRepository.ProductRepository{}
+		rowsUpdated := productRepo.UpdateProductDetail(db, id, field, newValue)
 
 		json.NewEncoder(w).Encode(rowsUpdated)
 	}
 }
 
+func (c Controller) GetProductIngredients(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+
+		id := params["id"]
+
+		productRepo := productRepository.ProductRepository{}
+		ingredients := productRepo.GetProductIngredients(db, id)
+
+		json.NewEncoder(w).Encode(ingredients)
+	}
+}
+
+func (c Controller) UpdateProductIngredients(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+		id := params["id"]
+
+		var product models.Product
+		_ = json.NewDecoder(r.Body).Decode(&product)
+
+		newValue := product.Ingredients
+
+		productRepo := productRepository.ProductRepository{}
+		rowsUpdated := productRepo.UpdateProductIngredients(db, id, newValue)
+
+		json.NewEncoder(w).Encode(rowsUpdated)
+	}
+}
+
+func (c Controller) GetProductSourcingValues(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+
+		id := params["id"]
+
+		productRepo := productRepository.ProductRepository{}
+		ingredients := productRepo.GetProductSourcingValues(db, id)
+
+		json.NewEncoder(w).Encode(ingredients)
+	}
+}
+
+func (c Controller) UpdateProductSourcingValues(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		params := mux.Vars(r)
+		id := params["id"]
+
+		var product models.Product
+		_ = json.NewDecoder(r.Body).Decode(&product)
+
+		newValue := product.SourcingValues
+
+		productRepo := productRepository.ProductRepository{}
+		rowsUpdated := productRepo.UpdateProductSourcingValues(db, id, newValue)
+
+		json.NewEncoder(w).Encode(rowsUpdated)
+	}
+}
+
+/*
 func (c Controller) GetProductName(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -323,68 +478,4 @@ func (c Controller) UpdateProductDiet(db *sql.DB) http.HandlerFunc {
 
 		json.NewEncoder(w).Encode(rowsUpdated)
 	}
-}
-
-func (c Controller) GetProductIngredients(db *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		params := mux.Vars(r)
-
-		id := params["id"]
-
-		productRepo := productRepository.ProductRepository{}
-		ingredients := productRepo.GetProductIngredients(db, id)
-
-		json.NewEncoder(w).Encode(ingredients)
-	}
-}
-
-func (c Controller) UpdateProductIngredients(db *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		params := mux.Vars(r)
-		id := params["id"]
-
-		var product models.Product
-		_ = json.NewDecoder(r.Body).Decode(&product)
-
-		newValue := product.Ingredients
-
-		productRepo := productRepository.ProductRepository{}
-		rowsUpdated := productRepo.UpdateProductIngredients(db, id, newValue)
-
-		json.NewEncoder(w).Encode(rowsUpdated)
-	}
-}
-
-func (c Controller) GetProductSourcingValues(db *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		params := mux.Vars(r)
-
-		id := params["id"]
-
-		productRepo := productRepository.ProductRepository{}
-		ingredients := productRepo.GetProductSourcingValues(db, id)
-
-		json.NewEncoder(w).Encode(ingredients)
-	}
-}
-
-func (c Controller) UpdateProductSourcingValues(db *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		params := mux.Vars(r)
-		id := params["id"]
-
-		var product models.Product
-		_ = json.NewDecoder(r.Body).Decode(&product)
-
-		newValue := product.SourcingValues
-
-		productRepo := productRepository.ProductRepository{}
-		rowsUpdated := productRepo.UpdateProductSourcingValues(db, id, newValue)
-
-		json.NewEncoder(w).Encode(rowsUpdated)
-	}
-}
+}*/
