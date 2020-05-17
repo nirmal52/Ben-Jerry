@@ -1195,6 +1195,7 @@
   "dietary_certifications": "Kosher",
   "productId": "646"
 }
+<<<<<<< HEAD
 </code></pre>
 <h2><a id="user-content-tasks-implemented" class="anchor" aria-hidden="true" href="#tasks-implemented"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Tasks Implemented</h2>
 <ul>
@@ -1419,6 +1420,103 @@ Using Go Test
 Manual Testing</p>
 </article>
   </div>
+=======
+```
+## Tasks Implemented
+
+- Implemented a REST API with CRUD functionality with PosgressSQL as DB 
+- Authenicated using JWT token 
+- Documentation done using Swagger ( // Swagger json is not created properly at the time of writing )
+- Extensive Testing is done using Post Main, Go Test and manual testing
+
+## Architecural Decision
+
+Table Definition is given below:
+
+Product Table will hold the string fields
+Ingredients Table will hold ( Product ID, Ingredient ID)
+SourcingValue Table will hold ( Product ID, Sourcing Value ID) 
+IngredientIndex Table will (Ingredient ID, Value)
+SourcingValue Table will (Sourcing Value ID, Value)
+
+
+### Design Choices Considered
+
+Efficient Storage and Retrieval of values based on the Values ( Ingredients , Sourcing Values) by keeping in Separate Tables
+
+
+PreProcess of Values in Ingredients :
+
+"butter (cream","salt)"   - Instead of saving 2 values , mapped to Single value in table "butter (cream salt) 
+
+
+"liquid sugar (sugar","water)" - mapped to "liquid sugar (sugar water )
+
+Database Used: Posgress SQL ( Used PostgreSQL as a Service , Elephant SQL ) - DB instance is up and running - Testing is possible by running application locally  
+
+## How Ingredients / Sourcing Values are updated since it is kept in two tables
+
+Old Values : Array of Ingredients present in DB
+New Values : Array of Ingredients given to the endpoint
+
+Compare Old Values and New Values :
+
+Make a Decision on Which Values to be Deleted 
+Make a Decision on Which Values to be Inserted 
+Make a Decision on Which Values not touched
+
+Example :
+
+Old Values : "ingredients": [
+    _"cream",_
+    _"skim milk",_
+    _"liquid sugar",_
+    _"water",_
+    __"sugar",__
+    __"coconut oil" ]__
+    
+ New Values : "ingredients": [
+    _"cream",_
+    _"skim milk",_
+    _"liquid sugar",_
+    _"water",_
+    __"black sugar",__
+    __"coco powder"__
+    ]
+    
+  Rows Untouched during Update :  [ "cream" , "skim milk" , "liquid sugar", "water" ]
+  
+  Rows to be Deleted:   [ "sugar", "coconut oil" ]
+  
+  Rows to be Inserted: ["black sugar", "coco powder" ]
+  
+  
+  
+  If the indexes are available for black sugar and coco powder in the ingredients index table , update only ingredients table
+  
+  If the indexs are not available for black sugar and coco powder in the ingredients index table , create entries for black sugar and coco powder in the ingredients table and then update the ingredients table
+  
+  ----------------
+
+
+
+
+### Table Definition 
+
+
+Users |  Products  |
+-------------|------|
+id|  id (PK) |
+email| name |
+password| image_open |
+|| image_close |
+|| description |
+|| story |
+|| allergy_info |
+|| dietary_certifications |
+
+
+>>>>>>> 9c56f939f0c2fc2d42f7ce07258b27084d39df0b
 
     </div>
 
@@ -1489,6 +1587,14 @@ Manual Testing</p>
 </div>
 
 
+<<<<<<< HEAD
+=======
+Response : JSON Array
+
+_While testing it took 1.5 min to get all the values_
+
+### GET Product by id
+>>>>>>> 9c56f939f0c2fc2d42f7ce07258b27084d39df0b
 
   <div id="ajax-error-message" class="ajax-error-message flash flash-error">
     <svg class="octicon octicon-alert" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg>
@@ -1498,6 +1604,7 @@ Manual Testing</p>
     You can’t perform that action at this time.
   </div>
 
+<<<<<<< HEAD
 
     <script crossorigin="anonymous" async="async" integrity="sha512-WcQmT2vhcClFVOaaAJV/M+HqsJ2Gq/myvl6F3gCVBxykazXTs+i5fvxncSXwyG1CSfcrqmLFw/R/bmFYzprX2A==" type="application/javascript" id="js-conditional-compat" data-src="https://github.githubassets.com/assets/compat-bootstrap-59c4264f.js"></script>
     <script crossorigin="anonymous" integrity="sha512-Qb7XHcWIafGt8U6FsJrxJqGCgszwjKK1zXv1+fAjIz0HDaYppswlGLxEInNMN2dlMBAZnZNSZL8wAvvhKxYx3A==" type="application/javascript" src="https://github.githubassets.com/assets/environment-bootstrap-41bed71d.js"></script>
@@ -1525,13 +1632,170 @@ Manual Testing</p>
     </details-dialog>
   </details>
 </template>
+=======
+Request Parameter : id
+
+Response : JSON element with same structure as example
+
+
+
+### CREATE Product by id
+[POST] /products/{:id}
+
+Request Parameter: id
+
+Request Body :  JSON ( with same structure as example) # productID field not supported # new ID generated
+
+
+
+Response :  JSON { "productID" : value }
+value - ID of newly created element
+
+>>>>>>> 9c56f939f0c2fc2d42f7ce07258b27084d39df0b
 
   <div class="Popover js-hovercard-content position-absolute" style="display: none; outline: none;" tabindex="0">
   <div class="Popover-message Popover-message--bottom-left Popover-message--large Box box-shadow-large" style="width:360px;">
   </div>
 </div>
 
+Request Parameter: id
 
+Request Body :  JSON ( with same structure as example) 
+
+Response:  0 - No change  , 1 - Element updated
+
+
+<<<<<<< HEAD
   </body>
 </html>
+=======
+### DELETE Product by id
+
+[DELETE] /products/{:id}
+>>>>>>> 9c56f939f0c2fc2d42f7ce07258b27084d39df0b
+
+Request Parameter: id
+
+Response:  0 - No change  , 1 - Element updated
+
+
+
+## Additional APIs provided for Each Values :
+
+### Read Product Name for Product ID
+[GET]  /products/{:id}/name
+
+### Update Product Name for Product ID
+[PUT] /products/{:id"}/name
+
+Request Body:  { "name" : value } 
+
+
+### Read Product Image_open for Product ID
+[GET]  /products/{:id}/image_open
+
+### Update Product Image_open for Product ID
+[PUT] /products/{:id"}/image_open
+
+Request Body:  { "image_open" : value } 
+
+### Read Product Image_closed for Product ID
+[GET]  /products/{:id}/image_closed
+
+### Update Product Image_open for Product ID
+[PUT] /products/{:id"}/image_closed
+
+Request Body:  { "image_closed" : value } 
+
+
+
+### Read Product Description for Product ID
+[GET]  /products/{:id}/description
+
+### Update Product Description for Product ID
+[PUT] /products/{:id"}/description
+
+Request Body:  { "description" : value } 
+
+
+### Read Product Story for Product ID
+[GET]  /products/{:id}/story
+
+### Update Product Story for Product ID
+[PUT] /products/{:id"}/story
+
+Request Body:  { "story" : value } 
+
+
+### Read Product Dietary Certification for Product ID
+[GET]  /products/{:id}/diet
+
+### Update Product Dietary Certification for Product ID
+[PUT] /products/{:id"}/diet
+
+Request Body:  { "dietary_certifications" : value } 
+
+
+### Read Product Allergy Info for Product ID
+[GET]  /products/{:id}/allergy
+
+### Update Product Allergy Info for Product ID
+[PUT] /products/{:id"}/allergy
+
+Request Body:  { "allergy_info" : value } 
+
+
+### Read Product Ingredients for Product ID
+[GET]  /products/{:id}/ingredients
+Response : { "ingredients" : Array of Strings } 
+
+
+
+### Update Product Ingredients for Product ID
+[PUT] /products/{:id"}/ingredients
+
+Request Body:  { "ingredients" : Array of Strings } 
+
+
+
+
+### Read Product Sourcing Value for Product ID
+[GET]  /products/{:id}/sourcingvalue
+Response : { "sourcing_value" : Array of Strings } 
+
+
+
+### Update Product Ingredients for Product ID
+[PUT] /products/{:id"}/ingredients
+
+Request Body:  { "sourcing_value" : Array of Strings } 
+
+
+## Testing
+
+Using PostMan -- Added postman collection to the zip 
+Using Go Test
+Manual Testing
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
