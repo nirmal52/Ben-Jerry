@@ -98,18 +98,34 @@ List of APIs supported
 
 [GET] /products 
 
+Response : JSON Array
+
 ### GET Product by id
 
 [GET] /products/{:id}
+Request Parameter : id
+Response : JSON element with same structure as example
 
 ### CREATE Product by id
 [POST] /products/{:id}
+Request Parameter: id
+Request Body :  JSON ( with same structure as example) # productID field not supported # new ID generated
+
+Response :  JSON { "productID" : value }
+value - ID of newly created element
 
 
 ### UPDATE Product by id
 [PUT] /products/{:id}
+Request Parameter: id
+Request Body :  JSON ( with same structure as example) 
+
+Response:  0 - No change  , 1 - Element updated
+
 
 
 ### DELETE Product by id
 [DELETE] /products/{:id}
+Request Parameter: id
 
+Response:  0 - No change  , 1 - Element updated
